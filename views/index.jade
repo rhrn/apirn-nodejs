@@ -1,0 +1,24 @@
+extends layouts/default
+
+block content
+  h2 Index here! viewed #{views}
+
+block some
+  div div
+
+block join
+
+  div.row-fluid
+    div.span-12
+      form(method="POST")
+        div.control-group
+          div.controls.input-prependx
+            <!-- span.add-on &#9993; -->
+            input.input-xlarge(type="text", name="email", placeholder="email")
+            span.help-inline
+        div.control-group
+          div.controls.input-prependx
+            <!-- span.add-on &#9679; -->
+            input.input-xlarge(type="password", name="password", placeholder="password")
+            span.help-inline
+        button.btn.btn-primary join
