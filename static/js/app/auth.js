@@ -4,11 +4,35 @@
 
   Auth.url = '/api/v1/join';
 
+  Auth.key = 'user';
+
   Auth.Model = Backbone.Model.extend({
-    'url': Auth.url
+
+    url: Auth.url,
+
+    checkAuth: function() {
+      this.user = this.getAuth();
+      if (typeof this.user !== 'undefined') {
+        this.trigger('authed', this.user);
+      }
+    }, 
+
+    setAuth: function(key) {
+      return this.store.set(Auth.key, key);
+    },
+
+    getAuth: function() {
+      return this.store.get(Auth.key);
+    }
+    
   });
 
   Auth.View = Backbone.View.extend({
+
+    initialize: function() {
+      this.model.on('authed', this.render, this);
+      this.model.checkAuth(); 
+    },
 
     events: {
       "click .btn": "click",
@@ -21,7 +45,8 @@
       this.model.save(this.data(), {
 
         success: function(model, res) {
-          console.log(model, res);
+          model.setAuth(res);
+          model.checkAuth();
         },
 
         error: function(model, res) {
@@ -47,6 +72,10 @@
       }
     },
 
+    render: function(user) {
+      this.$el.html('Hello: ' + user.email);
+    },
+
     clearErrors: function() {
       this.$('[name] ~ .help-inline').text('');
     }
@@ -55,14 +84,6 @@
 
   Auth.isAuthed = function() {
     console.log('isAuthed');
-  };
-
-  Auth.getAuth = function() {
-    console.log('getAuth');
-  };
-
-  Auth.login = function() {
-    console.log('login');
   };
 
   Auth.logout = function() {
