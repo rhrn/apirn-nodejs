@@ -10,10 +10,33 @@
 
     url: Auth.url,
 
+    sendAuth: function(data) {
+
+      this.save(data, {
+
+        success: function(_this, res) {
+          _this.setAuth(res);
+          _this.checkAuth();
+        },
+
+        error: function(_this, res) {
+          _this.trigger('error', JSON.parse(res.responseText));
+        },
+
+        beforeSend: function(xhr) {
+          xhr.setRequestHeader('Authorization', 'none');
+        }
+
+      });
+
+    },
+
     checkAuth: function() {
       this.user = this.getAuth();
       if (typeof this.user !== 'undefined') {
         this.trigger('authed', this.user);
+      } else {
+        this.trigger('notAuthed');
       }
     }, 
 
@@ -29,8 +52,12 @@
 
   Auth.View = Backbone.View.extend({
 
+    fields: ['email', 'password'],
+
     initialize: function() {
-      this.model.on('authed', this.render, this);
+      this.model.on('authed', this.user, this);
+      this.model.on('notAuthed', this.login, this);
+      this.model.on('error', this.error, this);
       this.model.checkAuth(); 
     },
 
@@ -42,25 +69,7 @@
     
       this.clearErrors();
 
-      this.model.save(this.data(), {
-
-        success: function(model, res) {
-          model.setAuth(res);
-          model.checkAuth();
-        },
-
-        error: function(model, res) {
-          var data = JSON.parse(res.responseText);
-          for(var i = 0, l = data.length; i < l; i++) {
-            $('[name="' + data[i].param + '"] ~ .help-inline').text(data[i].msg);
-          }
-        },
-
-        beforeSend: function(xhr) {
-          xhr.setRequestHeader('Authorization', 'none');
-        }
-
-      });
+      this.model.sendAuth(this.data());
 
       return false;
     },
@@ -72,8 +81,18 @@
       }
     },
 
-    render: function(user) {
-      this.$el.html('Hello: ' + user.email);
+    login: function(user) {
+      this.$el.show();
+    },
+
+    user: function(user) {
+      this.$el.show().html('Hello: ' + user.email);
+    },
+
+    error: function(data) {
+      for(var i = 0, l = data.length; i < l; i++) {
+        this.$('[name="' + data[i].param + '"] ~ .help-inline').text(data[i].msg);
+      }
     },
 
     clearErrors: function() {
