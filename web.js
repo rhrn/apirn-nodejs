@@ -3,6 +3,7 @@ var express = require('express'),
   expressValidator = require('express-validator'),
   web = require('./routers/web.js'),
   api = require('./routers/api.js'),
+  adm = require('./routers/adm.js'),
   jade = require('jade');
 
 app.configure(function() {
@@ -19,5 +20,6 @@ app.set('view engine', 'jade');
 
 web(app);
 api(app);
+adm(app);
 
 module.exports = app;
