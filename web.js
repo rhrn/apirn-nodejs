@@ -9,6 +9,7 @@ var express = require('express'),
 app.configure(function() {
   app.use('/static', express.static(__dirname + '/static'));
   app.use(express.bodyParser());
+  app.use(express.cookieParser());
   app.use(expressValidator);
   app.use(express.logger());
 });

@@ -42,15 +42,18 @@ module.exports = {
         err = validate.outcome(data);
 
         if (err === null) {
-          res.send(data);
+          for(key in data) {
+            res.cookie(key, data[key], {httpOnly: true});
+          }
+          res.json(data);
         } else {
-          res.send(418, err);
+          res.json(418, err);
         }
 
       });
 
     } else {
-      res.send(418, err);
+      res.json(418, err);
     }
   }
 
