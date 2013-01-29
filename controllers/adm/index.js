@@ -1,11 +1,11 @@
 module.exports = {
 
   index: function(req, res) {
-    console.log('adm index');
+    res.render('adm/index', {title: 'Adm index'});
   }, 
 
   join: function(req, res) {
-    console.log('adm join');
+    res.render('adm/join', {title: 'Adm join'});
   }
 
 };

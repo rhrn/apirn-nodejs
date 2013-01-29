@@ -1,26 +1,25 @@
-doctype 5
-html
-  head
-    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+extends main
 
-    title #{title}
+block link
+  link(rel="stylesheet", href="/static/css/bootstrap.min.css")
+  link(rel="stylesheet", href="/static/css/bootstrap-responsive.min.css")
+  link(rel="shortcut icon", href="/static/favicon.ico")
 
-    link(rel="stylesheet", href="/static/css/bootstrap.min.css")
-    link(rel="stylesheet", href="/static/css/bootstrap-responsive.min.css")
-    link(rel="shortcut icon", href="/static/favicon.ico")
+block script
+  script(src="/static/js/libs/require.js", data-main="/static/js/main")
 
-  body
+block body
 
-    div.container-fluid
+  div.container-fluid
 
-      block header
-        div.row-fluid
-          div.header admin header
+    block header
+      div.row-fluid
+        div.header adm header
 
-      block join
+    block join
 
-      block content
+    block content
 
-      block footer
-        div.row-fluid
-          div.footer admin footer
+    block footer
+      div.row-fluid
+        div.footer adm footer
