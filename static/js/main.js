@@ -6,10 +6,10 @@ require.config({
 
   paths: {
 
-    'apirn': 'libs/apirn',
     'jquery': 'libs/jquery.min',
     'underscore': 'libs/underscore-min',
     'backbone': 'libs/backbone-min',
+    'apirn': 'libs/apirn'
 
   },
 

@@ -10,7 +10,14 @@ block join
 
   div.row-fluid
     div.span-12
-      form(method="POST").hide
+      div#e-join
+
+  script#t-join(type='text/template')
+      <% if (typeof user !== 'undefined') { %>
+      div Hello <%= user.email %>
+      button.btn.btn-primary.logout logout
+      <% } else { %>
+      form(method="POST")
         div.control-group
           div.controls.input-prependx
             <!-- span.add-on &#9993; -->
@@ -21,4 +28,5 @@ block join
             <!-- span.add-on &#9679; -->
             input.input-xlarge(type="password", name="password", placeholder="password")
             span.help-inline
-        button.btn.btn-primary join
+        button.btn.btn-primary.join join
+      <% } %>

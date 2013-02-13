@@ -1,14 +1,16 @@
 (function() {
 
+  "use strict";
+
   var Auth = Auth || {};
-
-  Auth.url = '/api/v1/join';
-
-  Auth.key = 'user';
 
   Auth.Model = Backbone.Model.extend({
 
-    url: Auth.url,
+    initialize: function(_this) {
+      _.extend(this, _this);
+    },
+
+    key: 'user',
 
     sendAuth: function(data) {
 
@@ -36,7 +38,7 @@
       if (typeof this.user !== 'undefined') {
         this.trigger('authed', this.user);
       } else {
-        this.trigger('notAuthed');
+        this.trigger('notAuthed', {user: null});
       }
     }, 
 
@@ -46,6 +48,10 @@
 
     getAuth: function() {
       return this.store.get(Auth.key);
+    },
+
+    removeAuth: function() {
+      return this.store.set(Auth.key, null);
     }
     
   });
@@ -54,22 +60,33 @@
 
     fields: ['email', 'password'],
 
-    initialize: function() {
-      this.model.on('authed', this.user, this);
-      this.model.on('notAuthed', this.login, this);
+    initialize: function(_this) {
+
+      _.extend(this, _this);
+
+      this.model.on('authed', this.render, this);
+      this.model.on('notAuthed', this.render, this);
       this.model.on('error', this.error, this);
       this.model.checkAuth(); 
     },
 
     events: {
-      "click .btn": "click",
+      "click .join": "join",
+      "click .logout": "logout"
     },
 
-    click: function() {
+    join: function() {
     
       this.clearErrors();
 
       this.model.sendAuth(this.data());
+
+      return false;
+    },
+
+    logout: function() {
+
+      this.model.removeAuth();
 
       return false;
     },
@@ -81,14 +98,6 @@
       }
     },
 
-    login: function(user) {
-      this.$el.show();
-    },
-
-    user: function(user) {
-      this.$el.show().html('Hello: ' + user.email);
-    },
-
     error: function(data) {
       for(var i = 0, l = data.length; i < l; i++) {
         this.$('[name="' + data[i].param + '"] ~ .help-inline').text(data[i].msg);
@@ -97,6 +106,11 @@
 
     clearErrors: function() {
       this.$('[name] ~ .help-inline').text('');
+    },
+
+    render: function(user) {
+      console.log(user);
+      this.$el.html(this.template(user));
     }
 
   });

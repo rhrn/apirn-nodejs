@@ -1,14 +1,18 @@
 define(['app/auth', 'app/store'], function(Auth, Store) {
 
-  var model = new Auth.Model();
-
-  model.store = Store;
-
   new Auth.View({
 
-    el: $('form'),
+    el: $('#e-join'),
 
-    model: model
+    template: _.template($('#t-join').html()),
+
+    model: new Auth.Model({
+
+      url: '/api/v1/join',
+    
+      store: Store
+      
+    })
 
   });
 
