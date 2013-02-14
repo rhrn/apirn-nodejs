@@ -13,7 +13,7 @@ block join
       div#e-join
 
   script#t-join(type='text/template')
-      <% if (typeof user !== 'undefined') { %>
+      <% if (!_.isEmpty(user)) { %>
       div Hello <%= user.email %>
       button.btn.btn-primary.logout logout
       <% } else { %>

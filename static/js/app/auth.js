@@ -18,7 +18,7 @@
 
         success: function(_this, res) {
           _this.setAuth(res);
-          _this.checkAuth();
+          _this.auth();
         },
 
         error: function(_this, res) {
@@ -33,25 +33,21 @@
 
     },
 
-    checkAuth: function() {
-      this.user = this.getAuth();
-      if (typeof this.user !== 'undefined') {
-        this.trigger('authed', this.user);
-      } else {
-        this.trigger('notAuthed', {user: null});
-      }
-    }, 
+    auth: function() {
+        this.trigger('auth', this.getAuth());
+    },
 
     setAuth: function(key) {
-      return this.store.set(Auth.key, key);
+      return this.store.set(this.key, key);
     },
 
     getAuth: function() {
-      return this.store.get(Auth.key);
+      return this.store.get(this.key);
     },
 
     removeAuth: function() {
-      return this.store.set(Auth.key, null);
+      this.store.set(this.key, null);
+      this.trigger('auth');
     }
     
   });
@@ -64,10 +60,9 @@
 
       _.extend(this, _this);
 
-      this.model.on('authed', this.render, this);
-      this.model.on('notAuthed', this.render, this);
+      this.model.on('auth', this.render, this);
       this.model.on('error', this.error, this);
-      this.model.checkAuth(); 
+      this.model.auth(); 
     },
 
     events: {
@@ -109,19 +104,10 @@
     },
 
     render: function(user) {
-      console.log(user);
-      this.$el.html(this.template(user));
+      this.$el.html(this.template({user:user}));
     }
 
   });
-
-  Auth.isAuthed = function() {
-    console.log('isAuthed');
-  };
-
-  Auth.logout = function() {
-    console.log('logout');
-  };
 
   if (typeof define === "function") {
     define(Auth);
