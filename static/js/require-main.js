@@ -10,7 +10,8 @@ require.config({
     'bootstrap': 'libs/bootstrap.min',
     'underscore': 'libs/underscore-min',
     'backbone': 'libs/backbone-min',
-    'apirn': 'libs/apirn'
+
+    'apirn': 'app/apirn'
 
   },
 
