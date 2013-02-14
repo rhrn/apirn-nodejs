@@ -7,6 +7,7 @@ require.config({
   paths: {
 
     'jquery': 'libs/jquery.min',
+    'bootstrap': 'libs/bootstrap.min',
     'underscore': 'libs/underscore-min',
     'backbone': 'libs/backbone-min',
     'apirn': 'libs/apirn'
@@ -14,13 +15,17 @@ require.config({
   },
 
   shim: {
+
+    bootstrap: {
+      deps: ['jquery'],
+    },
     
     backbone: {
       deps: ['jquery', 'underscore'],
     },
 
     apirn: {
-      deps: ['backbone']
+      deps: ['backbone', 'bootstrap']
     }
 
   },
