@@ -1,0 +1,12 @@
+{
+  "name": "apirn-nodejs",
+  "version": "0.0.1",
+  "dependencies": {
+    "backbone": "latest",
+    "bootstrap": "latest",
+    "underscore": "latest",
+    "requirejs": "latest",
+    "amplify": "latest",
+    "jquery": "latest"
+  }
+}

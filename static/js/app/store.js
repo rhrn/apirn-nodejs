@@ -1,4 +1,4 @@
-define(['libs/amplify.store'], function() {
+define(['amplify.store'], function() {
 
   return {
     

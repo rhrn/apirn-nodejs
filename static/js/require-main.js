@@ -6,10 +6,11 @@ require.config({
 
   paths: {
 
-    'jquery': 'libs/jquery.min',
-    'bootstrap': 'libs/bootstrap.min',
-    'underscore': 'libs/underscore-min',
-    'backbone': 'libs/backbone-min',
+    'jquery': '/components/jquery/jquery.min',
+    'bootstrap': '/components/bootstrap/docs/assets/js/bootstrap',
+    'underscore': '/components/underscore/underscore-min',
+    'backbone': '/components/backbone/backbone-min',
+    'amplify.store': '/components/amplify/store/amplify.store',
 
     'apirn': 'app/apirn'
 
