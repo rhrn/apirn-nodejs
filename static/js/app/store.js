@@ -1,21 +1,21 @@
-define(['amplify.store'], function() {
+define(function() {
 
   return {
     
     set: function(key, value) {
-      return amplify.store(key, value);
+      return localStorage.setItem(key, JSON.stringify(value));
     },
 
     get: function(key) {
-      return amplify.store(key);
+      return JSON.parse(localStorage.getItem(key));
     },
 
     remove: function(key) {
-      return amplify.store(key, null);
+      return localStorage.removeItem(key);
     },
 
     clear: function() {
-      console.log('not implemented');
+      return localStorage.clear();
     }
 
   };

@@ -10,10 +10,8 @@ require.config({
     'bootstrap': '/components/bootstrap/docs/assets/js/bootstrap',
     'underscore': '/components/underscore/underscore-min',
     'backbone': '/components/backbone/backbone-min',
-    'amplify.store': '/components/amplify/store/amplify.store',
 
     'apirn': 'app/apirn'
-
   },
 
   shim: {
