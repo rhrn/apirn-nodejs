@@ -14,6 +14,3 @@ connect.open(function(err, db) {
 
   module.exports.db = db;
 });
-
-
-//db.users.ensureIndex({email:1}, {unique:true});
