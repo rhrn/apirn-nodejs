@@ -4,7 +4,8 @@
   "author": "rhrn <me@rhrn.ru>",
   "preferGlobal": "false",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "test": "mocha -R spec test/test.js"
   },
   "dependencies": {
     "express": "latest",
@@ -14,7 +15,7 @@
   },
   "devDependencies": {
     "mocha": "latest",
-    "should": "latest",
+    "chai": "latest",
     "supertest": "latest"
   },
   "repository": {
