@@ -2,7 +2,7 @@ var mongo = require('mongodb'),
   Db = mongo.Db,
   Server = mongo.Server,
   ObjectID = mongo.ObjectID,
-  connect = new Db('test', new Server('localhost', 27017, {}));
+  connect = new Db('test', new Server('localhost', 27017, {w: 'majority', j: true}));
 
 connect.open(function(err, db) {
 
