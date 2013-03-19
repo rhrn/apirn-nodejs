@@ -4,12 +4,20 @@ var mongo = require('mongodb'),
   ObjectID = mongo.ObjectID,
   connect = new Db('test', new Server('localhost', 27017, {w: 'majority', j: true}));
 
+module.exports.connected = function() {
+    console.log("MongoDB connected");
+};
+
+module.exports.connectFailed = function() {
+    console.log("MongoDB connect failed");
+};
+
 connect.open(function(err, db) {
 
   if (err) {
-    console.log("MongoDB connect failed");
+    module.exports.connectFailed();
   } else {
-    console.log("MongoDB connected");
+    module.exports.connected();
   }
 
   module.exports.db = db;
