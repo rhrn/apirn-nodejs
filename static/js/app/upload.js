@@ -36,29 +36,29 @@
 
         html += template(file);
 
-        this.reader = new FileReader();
+        reader = new FileReader();
 
-        this.reader.file = file;
+        reader.file = file;
 
-        this.reader.bar = '#' + file.id + ' .bar-success';
+        reader.bar = '#' + file.id + ' .bar-success';
 
-        this.reader.addEventListener('load', function(e) {
+        reader.addEventListener('load', function(e) {
           Upload.fileList.push(this.file);
         });
 
-        this.reader.addEventListener('error', function(e) {
+        reader.addEventListener('error', function(e) {
           el.find(this.bar).html('error');
         });
 
-        this.reader.addEventListener('abort', function(e) {
+        reader.addEventListener('abort', function(e) {
           el.find(this.bar).html('aborted');
         });
 
-        this.reader.addEventListener('progress', function(e) {
+        reader.addEventListener('progress', function(e) {
           el.find(this.bar).css('width', ((e.loaded * 100) / e.total) + '%');
         });
 
-        this.reader.readAsArrayBuffer(file);
+        reader.readAsArrayBuffer(file);
       }
 
       el.append(html);
@@ -66,44 +66,43 @@
 
   Upload.to = function(url, el) {
 
-    var _this = this;
-
-    var num = this.fileList.length, file;
+    var num = this.fileList.length, file, xhr, formData;
 
     for(var i = 0; num > i; i++) {
 
       file = this.fileList[i];
 
-      this.xhr = new XMLHttpRequest();
-      this.formData = new FormData();
+      xhr = new XMLHttpRequest();
+      formData = new FormData();
 
-      this.xhr.upload.bar = '#' + file.id + ' .bar-info';
+      xhr.upload.bar = el.find('#' + file.id + ' .bar-info');
     
-      this.xhr.upload.addEventListener('progress', function(e) {
-        el.find(this.bar).css('width', ((e.loaded * 100) / e.total) + '%');
+      xhr.upload.addEventListener('progress', function(e) {
+        this.bar.css('width', ((e.loaded * 100) / e.total) + '%');
       });
 
-      this.xhr.upload.addEventListener('load', function(e) {
+      xhr.upload.addEventListener('load', function(e) {
         console.log('xhr upload onload');
+        console.log(this);
       });
 
-      this.xhr.addEventListener('readystatechange', function(e) {
-        if(_this.xhr.readyState === 4) {
-          el.find(_this.xhr.upload.bar).html('uploaded');
-          console.log(_this.xhr.responseText);
+      xhr.upload.addEventListener('error', function(e) {
+        console.log('xhr error');
+        console.log(this);
+      });
+
+      xhr.addEventListener('readystatechange', function(e) {
+        if(this.readyState === 4) {
+          this.upload.bar.html('uploaded');
+          console.log(this.responseText);
         }
       });
 
-      this.xhr.upload.addEventListener('error', function(e) {
-        console.log('xhr error');
-        console.log(e);
-      });
+      xhr.open('POST', url, true);
 
-      this.xhr.open('POST', url, true);
+      formData.append('file', file);
 
-      this.formData.append('file', file);
-
-      this.xhr.send(this.formData);
+      xhr.send(formData);
 
     }
 
