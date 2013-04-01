@@ -21,4 +21,9 @@ connect.open(function(err, db) {
   }
 
   module.exports.db = db;
+
+  module.exports.file = function(name, mode, options) {
+    return new mongo.GridStore(db, name, mode, options);
+  };
+
 });

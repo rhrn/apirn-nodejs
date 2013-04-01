@@ -64,6 +64,23 @@ module.exports = {
 
     });
 
+  }, 
+
+  token: function(token, callback) {
+
+    mongo.db.collection(collName, function(err, collection) {
+
+      assert.equal(null, err);
+
+      collection.findOne({"tokens.token": token}, {user_id: 1, _id: 0}, function(err, doc) {
+
+        assert.equal(null, err);
+
+        callback(doc);
+
+      });
+
+    });
   }
 
 };
