@@ -109,7 +109,7 @@
 
   });
 
-  if (typeof define === "function") {
+  if (typeof define === "function" && define.amd) {
     define(Auth);
   }
 
