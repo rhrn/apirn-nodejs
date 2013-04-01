@@ -1,4 +1,4 @@
-define(['app/auth', 'app/store'], function(Auth, Store) {
+define(['app/auth', 'app/store', 'app/upload'], function(Auth, Store, Upload) {
 
   new Auth.View({
 
@@ -13,6 +13,22 @@ define(['app/auth', 'app/store'], function(Auth, Store) {
       store: Store
       
     })
+
+  });
+
+  new Upload.View({
+
+    el: $('#e-filelist'),
+
+    template: _.template($('#t-file').html()),
+
+    input: $('#i-files'),
+
+    button: $('#upload'),
+
+    url: '/api/v1/upload',
+
+    type: /image.*/
 
   });
 

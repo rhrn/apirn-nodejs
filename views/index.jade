@@ -14,10 +14,16 @@ block join
 
   script#t-join(type='text/template')
       <% if (!_.isEmpty(user)) { %>
-      div Hello <%= user.email %>
-      button.btn.btn-primary.logout logout
+      form(method='POST', enctype='multipart/form-data')
+        div Hello <%= user.email %>
+        div
+          input#i-files(name='files[]', type='file', multiple)
+        div
+          button.btn.btn-primary#upload upload
+        div#e-filelist
+        button.btn.btn-primary.logout logout
       <% } else { %>
-      form(method="POST")
+      form(method='POST')
         div.control-group
           div.controls.input-prependx
             <!-- span.add-on &#9993; -->
@@ -30,3 +36,14 @@ block join
             span.help-inline
         button.btn.btn-primary.join join
       <% } %>
+
+  script#t-file(type='text/template')
+    div.span3(id!="<%= id %>")
+      div.name <%= name %>
+      div.type <%= type %>
+      div.size <%= (size / (1024 * 1024)).toFixed(2) %> Mb
+      div.progress
+        div.bar.bar-info
+        div.bar.bar-success
+
+
