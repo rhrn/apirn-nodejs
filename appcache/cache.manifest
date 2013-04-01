@@ -1,0 +1,18 @@
+CACHE MANIFEST
+# version 1
+
+CACHE:
+/components/bootstrap/docs/assets/img/glyphicons-halflings.png
+/components/bootstrap/docs/assets/css/bootstrap.css
+/components/bootstrap/docs/assets/js/bootstrap.js
+/components/jquery/jquery.min.js
+/components/backbone/backbone-min.js
+/components/underscore/underscore-min.js
+/components/requirejs/require.js
+/static/js/require-main.js
+/static/js/app/apirn.js
+/static/js/app/auth.js
+/static/js/app/store.js
+
+NETWORK:
+*
