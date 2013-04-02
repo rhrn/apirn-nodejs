@@ -1,4 +1,4 @@
-define(['app/auth', 'app/store', 'app/upload'], function(Auth, Store, Upload) {
+define(['app/auth', 'app/store', 'app/upload', 'app/files'], function(Auth, Store, Upload, Files) {
 
   new Auth.View({
 
@@ -31,5 +31,17 @@ define(['app/auth', 'app/store', 'app/upload'], function(Auth, Store, Upload) {
     type: /image.*/
 
   });
+
+  var files = new Files.View({
+
+    el: $('#e-filelist'),
+
+    template: _.template($('#t-file').html()),
+
+    collection: new Files.Collection({ })
+
+  });
+
+  files.collection.fetch();
 
 });

@@ -20,8 +20,10 @@ block join
           input#i-files(name='files[]', type='file', multiple)
         div
           button.btn.btn-primary#upload upload
-        div#e-filelist
-        button.btn.btn-primary.logout logout
+        div
+          div#e-filelist
+        div
+          button.btn.btn-primary.logout logout
       <% } else { %>
       form(method='POST')
         div.control-group

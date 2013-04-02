@@ -7,4 +7,6 @@ module.exports = function(app) {
   app.post('/api/v1/join', auth.join);
   app.post('/api/v1/upload', files.upload);
 
+  app.get('/api/v1/files/list', files.list);
+
 };

@@ -33,6 +33,27 @@ module.exports = {
         });
 
       });
+  }, 
+
+  find: function(token, callback) {
+
+      userTokens.token(token, function(user) {
+
+          mongo.db.collection(collName, function(err, collection) {
+
+            assert.equal(null, err);
+
+            collection.find(user, {files: 1, _id: 0}).nextObject(function(err, doc) {
+
+              assert.equal(null, err);
+
+              callback(doc.files, user);
+            
+            });
+
+          });
+
+      });
   }
 
 };
