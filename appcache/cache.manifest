@@ -13,6 +13,7 @@ CACHE:
 /static/js/app/apirn.js
 /static/js/app/auth.js
 /static/js/app/store.js
+/static/js/app/upload.js
 
 NETWORK:
 *
