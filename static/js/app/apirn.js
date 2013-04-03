@@ -1,6 +1,8 @@
-define(['app/auth', 'app/store', 'app/upload', 'app/files'], function(Auth, Store, Upload, Files) {
+define(['app/auth', 'app/store', 'app/upload', 'app/files'],
 
-  new Auth.View({
+  function(Auth, Store, Upload, Files) {
+
+  var auth = new Auth.View({
 
     el: $('#e-join'),
 
@@ -16,32 +18,42 @@ define(['app/auth', 'app/store', 'app/upload', 'app/files'], function(Auth, Stor
 
   });
 
-  new Upload.View({
+  auth.on('login', function() {
 
-    el: $('#e-filelist'),
+    new Upload.View({
 
-    template: _.template($('#t-file').html()),
+      el: $('#e-filelist'),
 
-    input: $('#i-files'),
+      template: _.template($('#t-file').html()),
 
-    button: $('#upload'),
+      input: $('#i-files'),
 
-    url: '/api/v1/upload',
+      button: $('#upload'),
 
-    type: /image.*/
+      url: '/api/v1/upload',
+
+      type: /image.*/
+
+    });
+
+    var files = new Files.View({
+
+      el: $('#e-filelist'),
+
+      template: _.template($('#t-file').html()),
+
+      collection: new Files.Collection({ })
+
+    });
+
+    files.collection.fetch();
 
   });
 
-  var files = new Files.View({
-
-    el: $('#e-filelist'),
-
-    template: _.template($('#t-file').html()),
-
-    collection: new Files.Collection({ })
-
+  auth.on('logout', function() {
+    console.log('logout');
   });
 
-  files.collection.fetch();
+  auth.model.auth();
 
 });

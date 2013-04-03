@@ -34,7 +34,7 @@
     },
 
     auth: function() {
-        this.trigger('auth', this.getAuth());
+      this.trigger('auth', this.getAuth());
     },
 
     setAuth: function(key) {
@@ -47,7 +47,7 @@
 
     removeAuth: function() {
       this.store.set(this.key, null);
-      this.trigger('auth');
+      this.trigger('auth', null);
     }
     
   });
@@ -62,7 +62,7 @@
 
       this.model.on('auth', this.render, this);
       this.model.on('error', this.error, this);
-      this.model.auth(); 
+
     },
 
     events: {
@@ -70,20 +70,20 @@
       "click .logout": "logout"
     },
 
-    join: function() {
+    join: function(e) {
+
+      e.preventDefault();
     
       this.clearErrors();
 
       this.model.sendAuth(this.data());
-
-      return false;
     },
 
-    logout: function() {
+    logout: function(e) {
+
+      e.preventDefault();
 
       this.model.removeAuth();
-
-      return false;
     },
 
     data: function() {
@@ -95,16 +95,23 @@
 
     error: function(data) {
       for(var i = 0, l = data.length; i < l; i++) {
-        this.$('[name="' + data[i].param + '"] ~ .help-inline').text(data[i].msg);
+        this.$('[name="' + data[i].param + '"] ~ .help-inline').html(data[i].msg);
       }
     },
 
     clearErrors: function() {
-      this.$('[name] ~ .help-inline').text('');
+      this.$('[name] ~ .help-inline').empty();
     },
 
     render: function(user) {
+
       this.$el.html(this.template({user:user}));
+
+      if (user) {
+        this.trigger('login');
+      } else {
+        this.trigger('logout');
+      }
     }
 
   });
