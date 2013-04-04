@@ -44,8 +44,10 @@ block join
       div.name <%= name %>
       div.type <%= type %>
       div.size <%= (size / (1024 * 1024)).toFixed(2) %> Mb
+      <% if (typeof _id !== 'undefined') { %>
+      div.btn.btn-mini.delete-file(data-id!="<%= _id %>") delete
+      <% } else { %>
       div.progress
         div.bar.bar-info
         div.bar.bar-success
-
-
+      <% } %>

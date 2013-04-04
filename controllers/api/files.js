@@ -19,6 +19,16 @@ module.exports = {
 
     });
 
+  },
+
+  delete: function(req, res) {
+
+    files.delete(req.cookies.token, req.params.id, function(file, user) {
+
+      res.send(file);
+
+    });
+
   }
 
 };

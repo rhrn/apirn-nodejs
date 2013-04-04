@@ -3,7 +3,9 @@
   var Files = Files || {};
 
   Files.Model = Backbone.Model.extend({
-    _idAttribute: "_id"
+
+    idAttribute: '_id'
+
   });
 
   Files.Collection = Backbone.Collection.extend({
@@ -24,6 +26,21 @@
 
     }, 
 
+    events: {
+      'click .delete-file': 'deleteFile'
+    },
+
+    deleteFile: function(e) {
+
+      var fileId = $(e.target).data('id');
+      var model = this.collection.get(fileId);
+      model.on('destroy', function() {
+        this.$('#' + fileId).remove();
+      }, this);
+
+      model.destroy();
+    },
+
     reset: function(e) {
 
       var html = '', template = this.template;
@@ -32,6 +49,7 @@
 
         html += template({
           id: model.get('_id'),
+          _id: model.get('_id'),
           name: model.get('filename'),
           type: model.get('contentType'),
           size: model.get('length')
