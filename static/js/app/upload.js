@@ -32,7 +32,7 @@
 
         file = files[i]; 
 
-        file.id = 'f' + +new Date() + i;
+        file.id = 'f' + (+new Date()) + i;
 
         html += template(file);
 
@@ -42,21 +42,23 @@
 
         reader.bar = '#' + file.id + ' .bar-success';
 
-        reader.addEventListener('load', function(e) {
+        reader.onload = function(e) {
           Upload.fileList.push(this.file);
-        });
+          el.find(this.bar).css('width', '100%');
+          el.find(this.bar).html('readed');
+        };
 
-        reader.addEventListener('error', function(e) {
+        reader.onerror = function(e) {
           el.find(this.bar).html('error');
-        });
+        };
 
-        reader.addEventListener('abort', function(e) {
+        reader.onabort = function(e) {
           el.find(this.bar).html('aborted');
-        });
+        };
 
-        reader.addEventListener('progress', function(e) {
+        reader.onprogress = function(e) {
           el.find(this.bar).css('width', ((e.loaded * 100) / e.total) + '%');
-        });
+        };
 
         reader.readAsArrayBuffer(file);
       }

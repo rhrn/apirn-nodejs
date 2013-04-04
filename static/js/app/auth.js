@@ -90,7 +90,7 @@
       return {
         email: this.$('[name="email"]').val(),
         password: this.$('[name="password"]').val()
-      }
+      };
     },
 
     error: function(data) {
