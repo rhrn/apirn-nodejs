@@ -46,7 +46,7 @@ define(['app/auth', 'app/store', 'app/upload', 'app/files'],
 
     });
 
-    files.collection.fetch();
+    files.run();
 
   });
 
@@ -54,6 +54,6 @@ define(['app/auth', 'app/store', 'app/upload', 'app/files'],
     console.log('logout');
   });
 
-  auth.model.auth();
+  auth.run();
 
 });

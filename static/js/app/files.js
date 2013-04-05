@@ -59,7 +59,11 @@
 
       this.$el.html(html);
 
-    } 
+    },
+
+    run: function() {
+      this.collection.fetch();
+    }
 
   });
 

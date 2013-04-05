@@ -112,6 +112,10 @@
       } else {
         this.trigger('logout');
       }
+    },
+  
+    run: function() {
+      this.model.auth();
     }
 
   });
