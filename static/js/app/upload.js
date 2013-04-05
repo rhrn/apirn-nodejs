@@ -2,7 +2,7 @@
 
   var Upload = Upload || {};
 
-  Upload.fileList = [];
+  Upload.fileList = {};
 
   Upload.View = function(_this) {
 
@@ -10,7 +10,7 @@
 
     this.input.on('change', function() {
 
-      Upload.show(this.files, _this.template, _this.el);
+      Upload.show(this.files, _this);
 
     });
 
@@ -18,69 +18,79 @@
 
       e.preventDefault();
 
-      Upload.to(_this.url, _this.el);
+      Upload.to(_this.url);
 
     });
 
   };
 
-  Upload.show = function(files, template, el) {
+  Upload.show = function(files, params) {
 
-      var num = files.length, file, html = '';
+      var file;
 
-      for(var i = 0; num > i; i++) {
+      for(var i = 0, num = files.length; i < num ; i++) {
 
         file = files[i]; 
 
         file.id = 'f' + (+new Date()) + i;
 
-        html += template(file);
+        params.el.append(params.template(file));
 
-        reader = new FileReader();
+        file.readerBar = params.el.find('#' + file.id + ' .bar-success');
+        file.uploadBar = params.el.find('#' + file.id + ' .bar-info');
 
-        reader.file = file;
-
-        reader.bar = '#' + file.id + ' .bar-success';
-
-        reader.onload = function(e) {
-          Upload.fileList.push(this.file);
-          el.find(this.bar).css('width', '100%');
-          el.find(this.bar).html('readed');
-        };
-
-        reader.onerror = function(e) {
-          el.find(this.bar).html('error');
-        };
-
-        reader.onabort = function(e) {
-          el.find(this.bar).html('aborted');
-        };
-
-        reader.onprogress = function(e) {
-          el.find(this.bar).css('width', ((e.loaded * 100) / e.total) + '%');
-        };
-
-        reader.readAsArrayBuffer(file);
+        Upload.read(file);
       }
 
-      el.append(html);
   };
 
-  Upload.to = function(url, el) {
+  Upload.to = function(url) {
 
-    var num = this.fileList.length, file, xhr, formData;
+    for(var id in this.fileList) {
+      
+      Upload.send(url, this.fileList[id]);
 
-    for(var i = 0; num > i; i++) {
+    }
 
-      file = this.fileList[i];
+  };
 
-      xhr = new XMLHttpRequest();
-      formData = new FormData();
+  Upload.read = function(file) {
 
-      xhr.upload.bar = el.find('#' + file.id + ' .bar-info');
+    var reader = new FileReader();
+
+    reader.file = file;
+
+    reader.onload = function(e) {
+      Upload.fileList[this.file.id] = this.file;
+      this.file.readerBar.css('width', '100%');
+      this.file.readerBar.html('readed');
+    };
+
+    reader.onerror = function(e) {
+      this.file.readerBar.html('error');
+    };
+
+    reader.onabort = function(e) {
+      this.file.readerBar.html('aborted');
+    };
+
+    reader.onprogress = function(e) {
+      this.file.readerBar.css('width', ((e.loaded * 100) / e.total) + '%');
+    };
+
+    reader.readAsArrayBuffer(file);
+
+  };
+
+  Upload.send = function(url, file) {
+
+      var xhr = new XMLHttpRequest();
+      var formData = new FormData();
+
+      xhr.upload.file = file;
     
       xhr.upload.addEventListener('progress', function(e) {
-        this.bar.css('width', ((e.loaded * 100) / e.total) + '%');
+        this.file.uploadBar.css('width', ((e.loaded * 100) / e.total) + '%');
       });
 
       xhr.upload.addEventListener('load', function(e) {
@@ -95,7 +105,7 @@
 
       xhr.addEventListener('readystatechange', function(e) {
         if(this.readyState === 4) {
-          this.upload.bar.html('uploaded');
+          this.upload.file.uploadBar.html('uploaded');
           console.log(this.responseText);
         }
       });
@@ -105,8 +115,6 @@
       formData.append('file', file);
 
       xhr.send(formData);
-
-    }
 
   };
 
