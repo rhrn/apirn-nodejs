@@ -24,13 +24,21 @@ module.exports = {
             var f = {};
 
             f["user_id"] = user["user_id"];
-            f["file"] = gs;
+            f["file"] = {
+              "_id" : gs["_id"],
+              "id" : gs["_id"],
+              name : gs.filename,
+              type : gs.contentType,
+              size : gs.length,
+              created : gs.uploadDate,
+              md5 : gs.md5
+            };
 
             collection.insert(f, function() {
 
               assert.equal(null, err);
 
-              callback(gs, user);
+              callback(f["file"], user);
 
             });
 
@@ -48,7 +56,6 @@ module.exports = {
           mongo.db.collection(collName, function(err, collection) {
 
             assert.equal(null, err);
-
 
             collection.find(user, {file: 1, _id: 0}).toArray(function(err, doc) {
 

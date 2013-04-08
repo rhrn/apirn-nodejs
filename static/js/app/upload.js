@@ -8,9 +8,11 @@
 
     _.extend(this, _this);
 
+    Upload.params = _this;
+
     this.input.on('change', function() {
 
-      Upload.show(this.files, _this);
+      Upload.show(this.files);
 
     });
 
@@ -18,13 +20,22 @@
 
       e.preventDefault();
 
-      Upload.to(_this.url);
+      Upload.to();
 
+    });
+
+    this.el.on('click', '.cancel-file', function() {
+      Upload.cancel($(this).data('id'));
     });
 
   };
 
-  Upload.show = function(files, params) {
+  Upload.cancel = function(id) {
+      delete Upload.fileList[id];
+      $('#' + id).remove();
+  };
+
+  Upload.show = function(files) {
 
       var file;
 
@@ -34,21 +45,21 @@
 
         file.id = 'f' + (+new Date()) + i;
 
-        params.el.append(params.template(file));
+        this.params.el.append(this.params.template(file));
 
-        file.readerBar = params.el.find('#' + file.id + ' .bar-success');
-        file.uploadBar = params.el.find('#' + file.id + ' .bar-info');
+        file.readerBar = this.params.el.find('#' + file.id + ' .bar-success');
+        file.uploadBar = this.params.el.find('#' + file.id + ' .bar-info');
 
         Upload.read(file);
       }
 
   };
 
-  Upload.to = function(url) {
+  Upload.to = function() {
 
     for(var id in this.fileList) {
       
-      Upload.send(url, this.fileList[id]);
+      Upload.send(this.fileList[id]);
 
     }
 
@@ -82,7 +93,7 @@
 
   };
 
-  Upload.send = function(url, file) {
+  Upload.send = function(file) {
 
       var xhr = new XMLHttpRequest();
       var formData = new FormData();
@@ -105,12 +116,13 @@
 
       xhr.addEventListener('readystatechange', function(e) {
         if(this.readyState === 4) {
-          this.upload.file.uploadBar.html('uploaded');
-          console.log(this.responseText);
+          var file = Upload.params.template(JSON.parse(this.responseText));
+          $('#' + this.upload.file.id).after(file);
+          Upload.cancel(this.upload.file.id);
         }
       });
 
-      xhr.open('POST', url, true);
+      xhr.open('POST', this.params.url, true);
 
       formData.append('file', file);
 

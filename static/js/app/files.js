@@ -47,13 +47,7 @@
 
       _.each(this.collection.models, function(model) {
 
-        html += template({
-          id: model.get('_id'),
-          _id: model.get('_id'),
-          name: model.get('filename'),
-          type: model.get('contentType'),
-          size: model.get('length')
-        });
+        html += template(model.toJSON());
 
       });
 
