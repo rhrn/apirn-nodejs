@@ -46,6 +46,10 @@ define(['app/auth', 'app/store', 'app/upload', 'app/files'],
 
     });
 
+    Upload.events.on('uploaded', function(file) {
+      files.collection.push(file);
+    });
+
     files.run();
 
   });

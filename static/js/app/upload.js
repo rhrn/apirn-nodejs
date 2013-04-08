@@ -4,6 +4,8 @@
 
   Upload.fileList = {};
 
+  Upload.events = Backbone.Events;
+
   Upload.View = function(_this) {
 
     _.extend(this, _this);
@@ -106,19 +108,18 @@
 
       xhr.upload.addEventListener('load', function(e) {
         console.log('xhr upload onload');
-        console.log(this);
       });
 
       xhr.upload.addEventListener('error', function(e) {
         console.log('xhr error');
-        console.log(this);
       });
 
       xhr.addEventListener('readystatechange', function(e) {
         if(this.readyState === 4) {
-          var file = Upload.params.template(JSON.parse(this.responseText));
-          $('#' + this.upload.file.id).after(file);
+          var file = JSON.parse(this.responseText);
+          $('#' + this.upload.file.id).after(Upload.params.template(file));
           Upload.cancel(this.upload.file.id);
+          Upload.events.trigger('uploaded', file);
         }
       });
 

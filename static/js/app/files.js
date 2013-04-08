@@ -47,7 +47,7 @@
 
       _.each(this.collection.models, function(model) {
 
-        html += template(model.toJSON());
+        html += template(model.attributes);
 
       });
 
