@@ -9,5 +9,6 @@ module.exports = function(app) {
 
   app.get('/api/v1/files/list', files.list);
   app.delete('/api/v1/files/list/:id', files.delete);
+  app.get('/api/v1/files/download/:id', files.download);
 
 };

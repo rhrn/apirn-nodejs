@@ -45,6 +45,8 @@ block join
       div.type <%= type %>
       div.size <%= (size / (1024 * 1024)).toFixed(2) %> Mb
       <% if (typeof _id !== 'undefined') { %>
+      div.progress
+        div.bar.bar-info.download-file(style="width:100%", data-id!="<%= _id %>") download
       div.btn.btn-mini.delete-file(data-id!="<%= _id %>") delete
       <% } else { %>
       div.progress

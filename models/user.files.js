@@ -76,6 +76,32 @@ module.exports = {
       });
   }, 
 
+  fetch: function(token, fileId, callback) {
+
+      userTokens.token(token, function(user) {
+
+          mongo.db.collection(collName, function(err, collection) {
+
+            assert.equal(null, err);
+            
+            user["file._id"] = ObjectID(fileId);
+
+            collection.find(user).nextObject(function(err, doc) {
+
+              assert.equal(null, err);
+              assert.notEqual(null, doc);
+              
+              monogodb.GridStore.read(mongo.db, user["file._id"], function(err, data) {
+                callback(doc.file, data, user);
+              });
+            
+            });
+
+          });
+
+      });
+  },
+
   delete: function(token, fileId, callback) {
 
       userTokens.token(token, function(user) {

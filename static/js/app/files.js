@@ -27,7 +27,18 @@
     }, 
 
     events: {
+      'click .download-file': 'downloadFile',
       'click .delete-file': 'deleteFile'
+    },
+
+    downloadFile: function(e) {
+
+      var fileId = $(e.target).data('id');
+
+      var url = '/api/v1/files/download/' + fileId;
+
+      window.open(url);
+
     },
 
     deleteFile: function(e) {
