@@ -4,33 +4,39 @@
 
   Upload.fileList = {};
 
-  Upload.events = Backbone.Events;
+  Upload.Events = Backbone.Events;
 
-  Upload.View = function(_this) {
+  Upload.View = Backbone.View.extend({
 
-    _.extend(this, _this);
+    initialize: function(_this) {
 
-    Upload.params = _this;
+      _.extend(this, _this);
 
-    this.input.on('change', function() {
+      Upload.params = _this;
 
-      Upload.show(this.files);
+      this.input.on('change', function() {
 
-    });
+        Upload.show(this.files);
 
-    this.button.on('click', function(e) {
+      });
 
-      e.preventDefault();
+      this.button.on('click', function(e) {
 
-      Upload.to();
+        e.preventDefault();
 
-    });
+        Upload.to();
 
-    this.el.on('click', '.cancel-file', function() {
-      Upload.cancel($(this).data('id'));
-    });
+      });
 
-  };
+      this.el.on('click', '.cancel-file', function() {
+        Upload.cancel($(this).data('id'));
+      });
+
+    },
+
+    events: Upload.Events
+
+  });
 
   Upload.cancel = function(id) {
       delete Upload.fileList[id];
@@ -119,7 +125,7 @@
           var file = JSON.parse(this.responseText);
           $('#' + this.upload.file.id).after(Upload.params.template(file));
           Upload.cancel(this.upload.file.id);
-          Upload.events.trigger('uploaded', file);
+          Upload.Events.trigger('uploaded', file);
         }
       });
 

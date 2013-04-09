@@ -20,7 +20,7 @@ define(['app/auth', 'app/store', 'app/upload', 'app/files'],
 
   auth.on('login', function() {
 
-    new Upload.View({
+    var upload = new Upload.View({
 
       el: $('#e-filelist'),
 
@@ -46,7 +46,7 @@ define(['app/auth', 'app/store', 'app/upload', 'app/files'],
 
     });
 
-    Upload.events.on('uploaded', function(file) {
+    upload.on('uploaded', function(file) {
       files.collection.push(file);
     });
 
