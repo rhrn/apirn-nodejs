@@ -25,8 +25,6 @@ module.exports = {
 
     files.fetch(req.cookies.token, req.params.id, function(file, data, user) {
 
-      console.log(file);
-
       res.setHeader('Content-Type', file.type);
       res.setHeader('Content-Length', file.size);
       res.setHeader('Content-Disposition', 'inline; filename="' + file.name + '"');
