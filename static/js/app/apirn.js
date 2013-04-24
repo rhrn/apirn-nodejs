@@ -18,44 +18,46 @@ define(['app/auth', 'app/store', 'app/upload', 'app/files'],
 
   });
 
+  var files = new Files.View({
+
+    el: $('#e-filelist'),
+
+    upload: _.template($('#t-upload').html()),
+
+    template: _.template($('#t-file').html()),
+
+    collection: new Files.Collection({ })
+
+  });
+
+  var upload = new Upload.View({
+
+    el: $('#e-filelist'),
+
+    template: _.template($('#t-file').html()),
+
+    input: $('#i-files'),
+
+    button: $('#upload'),
+
+    url: '/api/v1/upload',
+
+    type: /image.*/
+
+  });
+
   auth.on('login', function() {
 
-    var upload = new Upload.View({
-
-      el: $('#e-filelist'),
-
-      template: _.template($('#t-file').html()),
-
-      input: $('#i-files'),
-
-      button: $('#upload'),
-
-      url: '/api/v1/upload',
-
-      type: /image.*/
-
-    });
-
-    var files = new Files.View({
-
-      el: $('#e-filelist'),
-
-      template: _.template($('#t-file').html()),
-
-      collection: new Files.Collection({ })
-
-    });
+    files.run();
 
     upload.on('uploaded', function(file) {
       files.collection.push(file);
     });
 
-    files.run();
-
   });
 
   auth.on('logout', function() {
-    console.log('logout');
+    files.stop();
   });
 
   auth.run();

@@ -22,6 +22,8 @@
 
       _.extend(this, _this);
 
+      this.render();
+
       this.collection.on("reset", this.reset, this);
 
     }, 
@@ -62,12 +64,20 @@
 
       });
 
-      this.$el.html(html);
+      this.$el.append(html);
 
+    },
+
+    render: function() {
+      this.$el.before(this.upload());
     },
 
     run: function() {
       this.collection.fetch();
+    },
+
+    stop: function() {
+      this.$el.empty();
     }
 
   });

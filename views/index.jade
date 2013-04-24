@@ -1,43 +1,40 @@
 extends layouts/default
 
-block content
-  h2 Index here! viewed #{views}
-
-block some
-  div div
-
 block join
+  div.pull-right#e-join
 
+block content
+
+  div.row-fluid#e-filelist
   div.row-fluid
-    div.span-12
-      div#e-join
+    h2 Index here! viewed #{views}
+
+block js-templates
+
+  script#t-upload(type='text/template')
+    div.row-fluid#e-upload
+      input#i-files(name='files[]', type='file', multiple)
+      button.btn.btn-primary#upload upload
 
   script#t-join(type='text/template')
-      <% if (!_.isEmpty(user)) { %>
-      form(method='POST', enctype='multipart/form-data')
-        div Hello <%= user.email %>
-        div
-          input#i-files(name='files[]', type='file', multiple)
-        div
-          button.btn.btn-primary#upload upload
-        div
-          div#e-filelist
-        div
-          button.btn.btn-primary.logout logout
-      <% } else { %>
-      form(method='POST')
-        div.control-group
-          div.controls.input-prependx
-            <!-- span.add-on &#9993; -->
-            input.input-xlarge(type="text", name="email", placeholder="email")
-            span.help-inline
-        div.control-group
-          div.controls.input-prependx
-            <!-- span.add-on &#9679; -->
-            input.input-xlarge(type="password", name="password", placeholder="password")
-            span.help-inline
-        button.btn.btn-primary.join join
-      <% } %>
+    <% if (!_.isEmpty(user)) { %>
+    form(method='POST', enctype='multipart/form-data')
+      div Hello <%= user.email %>
+        button.btn.btn-primary.logout logout
+    <% } else { %>
+    form(method='POST')
+      div.control-group
+        div.controls.input-prependx
+          <!-- span.add-on &#9993; -->
+          input.input-xlarge(type="text", name="email", placeholder="email")
+          span.help-inline
+      div.control-group
+        div.controls.input-prependx
+          <!-- span.add-on &#9679; -->
+          input.input-xlarge(type="password", name="password", placeholder="password")
+          span.help-inline
+      button.btn.btn-primary.join join
+    <% } %>
 
   script#t-file(type='text/template')
     div.span3(id!="<%= id %>")

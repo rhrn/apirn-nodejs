@@ -12,13 +12,15 @@ block body
   div.container-fluid
 
     block header
-      div.row-fluid
-        div.header default header
-
-    block join
+      div.navbar
+        div.navbar-inner
+          div.pull-left
+            block join
 
     block content
 
     block footer
       div.row-fluid
         div.footer default footer
+
+    block js-templates
