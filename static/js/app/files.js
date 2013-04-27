@@ -73,7 +73,7 @@
     },
 
     run: function() {
-      this.collection.fetch();
+      this.collection.fetch({reset:true});
     },
 
     stop: function() {
