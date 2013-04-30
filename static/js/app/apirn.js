@@ -47,13 +47,11 @@ define(['app/auth', 'app/store', 'app/upload', 'app/files'],
   });
 
   auth.on('login', function() {
-
     files.run();
+  });
 
-    upload.on('uploaded', function(file) {
-      files.collection.push(file);
-    });
-
+  Upload.Events.on('uploaded', function(file) {
+    files.collection.push(file);
   });
 
   auth.on('logout', function() {

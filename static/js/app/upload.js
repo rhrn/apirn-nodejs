@@ -66,9 +66,7 @@
   Upload.to = function() {
 
     for(var id in this.fileList) {
-      
       Upload.send(this.fileList[id]);
-
     }
 
   };
@@ -80,21 +78,31 @@
     reader.file = file;
 
     reader.onload = function(e) {
-      Upload.fileList[this.file.id] = this.file;
-      this.file.readerBar.css('width', '100%');
-      this.file.readerBar.html('readed');
+      if (e.target.readyState === FileReader.DONE) {
+        Upload.fileList[this.file.id] = this.file;
+        this.file.readerBar.css('width', '100%');
+        this.file.readerBar.html('readed');
+      } else {
+        this.file.readerBar.html('failed');
+      }
+      this.file.readerBar.off('click');
     };
 
-    reader.onerror = function(e) {
-      this.file.readerBar.html('error');
+    reader.onloadstart = function() {
+      this.file.readerBar.html('reading...');
+      this.file.readerBar.on('click', function() {
+        reader.abort();
+      });
     };
 
-    reader.onabort = function(e) {
+    reader.onabort = function() {
       this.file.readerBar.html('aborted');
     };
 
     reader.onprogress = function(e) {
-      this.file.readerBar.css('width', ((e.loaded * 100) / e.total) + '%');
+      if (e.lengthComputable) {
+        this.file.readerBar.css('width', ((e.loaded * 100) / e.total) + '%');
+      }
     };
 
     reader.readAsArrayBuffer(file);
@@ -109,7 +117,9 @@
       xhr.upload.file = file;
     
       xhr.upload.addEventListener('progress', function(e) {
-        this.file.uploadBar.css('width', ((e.loaded * 100) / e.total) + '%');
+        if (e.lengthComputable) {
+          this.file.uploadBar.css('width', ((e.loaded * 100) / e.total) + '%');
+        }
       });
 
       xhr.upload.addEventListener('load', function(e) {
