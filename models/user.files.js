@@ -63,7 +63,8 @@ module.exports = {
 
               if (doc !== null) {
                 var files = [];
-                for(i = 0, l = doc.length; l > i; i++) {
+                var i = doc.length;
+                while(i--) {
                   files.push(doc[i].file);
                 }
                 callback(files, user);

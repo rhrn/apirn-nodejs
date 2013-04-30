@@ -53,7 +53,7 @@
 
         file.id = 'f' + (+new Date()) + i;
 
-        this.params.el.append(this.params.template(file));
+        this.params.el.prepend(this.params.template(file));
 
         file.readerBar = this.params.el.find('#' + file.id + ' .bar-success');
         file.uploadBar = this.params.el.find('#' + file.id + ' .bar-info');
