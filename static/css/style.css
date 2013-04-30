@@ -1,3 +1,19 @@
-body {
-  
+#e-filelist .el {
+  display: inline-block;
+  width: 31%;
+  margin: 1%;
+}
+
+@media only screen and (max-width: 320px) {
+  #e-filelist .el {
+    width: 98%;
+    margin: 1%;
+  }
+}
+
+@media only screen and (min-width: 321px) and (max-width: 640px) {
+  #e-filelist .el {
+    width: 46%;
+    margin: 1%;
+  }
 }

@@ -37,7 +37,7 @@ block js-templates
     <% } %>
 
   script#t-file(type='text/template')
-    div.span3(id!="<%= id %>")
+    div.el(id!="<%= id %>")
       div.name <%= name %>
       div.type <%= type %>
       div.size <%= (size / (1024 * 1024)).toFixed(2) %> Mb
