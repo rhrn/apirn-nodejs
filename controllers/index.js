@@ -8,7 +8,7 @@ module.exports = {
     models.pages.incrementView('index');
 
     models.pages.getViews('index', function(views) {
-      res.render('index', {title : 'My first Title!', views: views, layout: 'admin'});
+      res.render('index', {title : 'title', views: views});
     });
 
   } 
