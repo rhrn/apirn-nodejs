@@ -48,6 +48,7 @@ define(['app/auth', 'app/store', 'app/upload', 'app/files'],
 
   auth.on('login', function() {
     files.run();
+    upload.run();
   });
 
   Upload.Events.on('uploaded', function(file) {
@@ -56,6 +57,7 @@ define(['app/auth', 'app/store', 'app/upload', 'app/files'],
 
   auth.on('logout', function() {
     files.stop();
+    upload.stop();
   });
 
   auth.run();

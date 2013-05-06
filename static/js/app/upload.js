@@ -34,6 +34,16 @@
 
     },
 
+    run: function() {
+      this.input.show();
+      this.button.show();
+    },
+
+    stop: function() {
+      this.input.hide();
+      this.button.hide();
+    },
+
     events: Upload.Events
 
   });
