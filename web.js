@@ -9,7 +9,7 @@ var express = require('express'),
 app.configure(function() {
   app.use('/components', express.static(__dirname + '/components'));
   app.use('/static', express.static(__dirname + '/static'));
-  app.use(express.bodyParser());
+  app.use(express.bodyParser(express.limit('200gb')));
   app.use(express.cookieParser());
   app.use(expressValidator);
   app.use(express.logger());

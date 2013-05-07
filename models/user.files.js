@@ -12,33 +12,36 @@ module.exports = {
       userTokens.token(token, function(user) {
 
         var gs = monogodb.GridStore(mongo.db, files.file.name, "w", {
-          "content_type": files.file.type
+          type: files.file.type
         });
 
-        gs.writeFile(files.file.path, function(err, gs) {
+        gs.writeFile(files.file.path, function(err, doc) {
 
-          mongo.db.collection(collName, function(err, collection) {
+          monogodb.GridStore.read(mongo.db, doc.fileId, function(err, fileData) {
 
-            assert.equal(null, err);
-
-            var f = {};
-
-            f["user_id"] = user["user_id"];
-            f["file"] = {
-              "_id" : gs["_id"],
-              "id" : gs["_id"],
-              name : gs.filename,
-              type : gs.contentType,
-              size : gs.length,
-              created : gs.uploadDate,
-              md5 : gs.md5
-            };
-
-            collection.insert(f, function() {
+            mongo.db.collection(collName, function(err, collection) {
 
               assert.equal(null, err);
 
-              callback(f["file"], user);
+              var f = {};
+
+              f["user_id"] = user["user_id"];
+              f["file"] = {
+                "_id":   doc.fileId,
+                id:      doc.fileId,
+                name:    doc.filename,
+                type:    doc.options.type,
+                size:    fileData.length,
+                created: doc.uploadDate
+              };
+
+              collection.insert(f, function() {
+
+                assert.equal(null, err);
+
+                callback(f["file"], user);
+
+              });
 
             });
 
