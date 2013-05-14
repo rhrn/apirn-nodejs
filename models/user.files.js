@@ -80,7 +80,52 @@ module.exports = {
       });
   }, 
 
-  fetch: function(token, fileId, callback) {
+  public: function(fileId, range, callback) {
+
+    console.log('model files public', range);
+
+    mongo.db.collection(collName, function(err, collection) {
+
+      assert.equal(null, err);
+
+      fileId = new ObjectID(fileId);
+
+      var file = {"file._id": fileId};
+
+      collection.findOne(file, function(err, doc) {
+
+        assert.equal(null, err);
+        assert.notEqual(null, doc);
+
+        var gs = new monogodb.GridStore(mongo.db, fileId, "r");
+
+        gs.open(function(err, gs) {
+
+            gs.seek(range.start, function() {
+
+              var length = null;
+              if (range.end !== undefined) {
+                length = range.end - range.start; 
+              }
+
+              doc.file.length = length;
+
+              gs.read(length, function(err, data) {
+
+                callback(doc.file, data);
+
+              });
+
+            });
+
+        });
+
+      });
+
+    });
+  },
+
+  private: function(token, fileId, callback) {
 
       userTokens.token(token, function(user) {
 
@@ -88,7 +133,7 @@ module.exports = {
 
             assert.equal(null, err);
             
-            user["file._id"] = ObjectID(fileId);
+            user["file._id"] = new ObjectID(fileId);
 
             collection.find(user).nextObject(function(err, doc) {
 
@@ -114,7 +159,7 @@ module.exports = {
 
             assert.equal(null, err);
             
-            user["file._id"] = ObjectID(fileId);
+            user["file._id"] = new ObjectID(fileId);
 
             collection.find(user).nextObject(function(err, doc) {
 
