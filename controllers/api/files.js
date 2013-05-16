@@ -58,6 +58,9 @@ module.exports = {
 
     //files.private(req.cookies.token, req.params.id, function(file, data, user) {
     files.public(req.params.id, range, function(file, data) {
+
+      // dirty set timeout
+      req.connection.setTimeout(file.size);
  
       file.length = file.size - range.start;
       range.end = file.size - 1;
