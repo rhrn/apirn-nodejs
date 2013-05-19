@@ -26,7 +26,7 @@ define(['app/auth', 'app/store', 'app/upload', 'app/files'],
 
     template: _.template($('#t-file').html()),
 
-    collection: new Files.Collection({ })
+    collection: new Files.Collection({})
 
   });
 

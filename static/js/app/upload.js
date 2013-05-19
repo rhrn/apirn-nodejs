@@ -2,6 +2,8 @@
 
   var Upload = Upload || {};
 
+  Upload.instant = true;
+
   Upload.fileList = {};
 
   Upload.Events = Backbone.Events;
@@ -20,13 +22,16 @@
 
       });
 
-      this.button.on('click', function(e) {
+      if (this.button.length) {
 
-        e.preventDefault();
+        Upload.instant = false;
 
-        Upload.to();
+        this.button.on('click', function(e) {
+          e.preventDefault();
+          Upload.to();
+        });
 
-      });
+      }
 
       this.el.on('click', '.cancel-file', function() {
         Upload.cancel($(this).data('id'));
@@ -36,12 +41,16 @@
 
     run: function() {
       this.input.show();
-      this.button.show();
+      if (this.button.length) {
+        this.button.show();
+      }
     },
 
     stop: function() {
       this.input.hide();
-      this.button.hide();
+      if (this.button.length) {
+        this.button.hide();
+      }
     },
 
     events: Upload.Events
@@ -89,9 +98,16 @@
 
     reader.onload = function(e) {
       if (e.target.readyState === FileReader.DONE) {
-        Upload.fileList[this.file.id] = this.file;
+
         this.file.readerBar.css('width', '100%');
         this.file.readerBar.html('readed');
+        
+        if (Upload.instant) {
+          Upload.send(this.file); 
+        } else {
+          Upload.fileList[this.file.id] = this.file;
+        }
+
       } else {
         this.file.readerBar.html('failed');
       }
@@ -107,6 +123,7 @@
 
     reader.onabort = function() {
       this.file.readerBar.html('aborted');
+      this.file.readerBar.off('click');
     };
 
     reader.onprogress = function(e) {
