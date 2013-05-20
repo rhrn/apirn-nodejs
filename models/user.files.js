@@ -60,7 +60,7 @@ module.exports = {
 
             assert.equal(null, err);
 
-            collection.find(user, {file: 1, _id: 0}).toArray(function(err, doc) {
+            collection.find(user, {file: 1, _id: 0}).sort({"file.created": 1}).toArray(function(err, doc) {
 
               assert.equal(null, err);
 
