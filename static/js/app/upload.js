@@ -2,6 +2,8 @@
 
   var Upload = Upload || {};
 
+  Upload.chunkSize = 1024 * 1024 * 1;
+
   Upload.instant = true;
 
   Upload.fileList = {};
@@ -66,6 +68,14 @@
 
       var file;
 
+      var progress = function(e, percent) {
+          $(this).css('width', percent + '%');
+      };
+
+      var message = function(e, message) {
+          $(this).html(message);
+      };
+
       for(var i = 0, num = files.length; i < num ; i++) {
 
         file = files[i]; 
@@ -75,10 +85,61 @@
         this.params.el.prepend(this.params.template(file));
 
         file.readerBar = this.params.el.find('#' + file.id + ' .bar-success');
+
+        file.readerBar.on('progress', progress);
+        file.readerBar.on('message', message);
+
         file.uploadBar = this.params.el.find('#' + file.id + ' .bar-info');
 
+        file.uploadBar.on('progress', progress);
+        file.uploadBar.on('message', message);
+
         Upload.read(file);
+
+        // Trying parts upload
+        //Upload.readChunks(file);
       }
+
+  };
+
+  Upload.readChunks = function(file) {
+
+    var size = file.size;
+
+    if (size > Upload.chunkSize) {
+
+      var part;
+      var start = 0;
+      var stop = Upload.chunkSize - 1;
+      var chunksLength = Math.ceil(file.size / Upload.chunkSize);
+
+      for (i = 1; i <= chunksLength; i++) {
+
+        var reader = new FileReader();
+
+        if (stop > size) {
+          stop = size;
+        }
+
+        reader.onload = function() {
+          file.readerBar.trigger('progress', Math.floor((stop * 100) / size));
+          file.readerBar.trigger('message', Math.floor((stop * 100) / size));
+        };
+
+        part = file.slice(start, stop, file.type);
+
+        reader.readAsBinaryString(part);
+
+        start = stop + 1;
+        stop = stop + Upload.chunkSize;
+      } 
+
+      //var formData = new FormData();
+      //var xhr = new XMLHttpRequest();
+
+    } else {
+      Upload.read(file);
+    }
 
   };
 
@@ -99,8 +160,8 @@
     reader.onload = function(e) {
       if (e.target.readyState === FileReader.DONE) {
 
-        this.file.readerBar.css('width', '100%');
-        this.file.readerBar.html('readed');
+        this.file.readerBar.trigger('progress', 100);
+        this.file.readerBar.trigger('message', 'readed');
         
         if (Upload.instant) {
           Upload.send(this.file); 
@@ -109,30 +170,30 @@
         }
 
       } else {
-        this.file.readerBar.html('failed');
+        this.file.readerBar.trigger('message', 'failed');
       }
       this.file.readerBar.off('click');
     };
 
     reader.onloadstart = function() {
-      this.file.readerBar.html('reading...');
+      this.file.readerBar.trigger('message', 'reading...');
       this.file.readerBar.on('click', function() {
         reader.abort();
       });
     };
 
     reader.onabort = function() {
-      this.file.readerBar.html('aborted');
+      this.file.readerBar.trigger('message', 'aborted');
       this.file.readerBar.off('click');
     };
 
     reader.onprogress = function(e) {
       if (e.lengthComputable) {
-        this.file.readerBar.css('width', ((e.loaded * 100) / e.total) + '%');
+        this.file.readerBar.trigger('progress', (e.loaded * 100) / e.total);
       }
     };
 
-    reader.readAsArrayBuffer(file);
+    reader.readAsBinaryString(file);
 
   };
 
@@ -145,16 +206,20 @@
     
       xhr.upload.addEventListener('progress', function(e) {
         if (e.lengthComputable) {
-          this.file.uploadBar.css('width', ((e.loaded * 100) / e.total) + '%');
+          this.file.uploadBar.trigger('progress', Math.floor((e.loaded * 100) / e.total));
         }
       });
 
+      xhr.upload.addEventListener('loadstart', function(e) {
+        this.file.uploadBar.trigger('message', 'uploading...');
+      });
+
       xhr.upload.addEventListener('load', function(e) {
-        console.log('xhr upload onload');
+        this.file.uploadBar.trigger('message', 'processing...');
       });
 
       xhr.upload.addEventListener('error', function(e) {
-        console.log('xhr error');
+        this.file.uploadBar.trigger('message', 'error');
       });
 
       xhr.addEventListener('readystatechange', function(e) {

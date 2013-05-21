@@ -9,6 +9,8 @@ module.exports = {
 
   save: function(token, files, callback) {
 
+      assert.notEqual(undefined, token);
+
       userTokens.token(token, function(user) {
 
         var gs = monogodb.GridStore(mongo.db, files.file.name, "w", {
