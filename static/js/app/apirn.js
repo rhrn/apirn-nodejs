@@ -38,8 +38,6 @@ define(['app/auth', 'app/store', 'app/upload', 'app/files'],
 
     input: $('#i-files'),
 
-    button: $('#upload'),
-
     url: '/api/v1/upload',
 
     type: /image.*/
