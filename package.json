@@ -11,7 +11,8 @@
     "express": "latest",
     "mongodb": "latest",
     "express-validator": "latest",
-    "jade": "latest"
+    "jade": "latest",
+    "mmmagic": "latest"
   },
   "devDependencies": {
     "mocha": "latest",

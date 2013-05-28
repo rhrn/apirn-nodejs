@@ -4,6 +4,8 @@ var mongo = require('../configure/mongodb.js');
 var userTokens = require('./user.tokens.js');
 var assert = require('assert');
 var ObjectID = monogodb.ObjectID;
+var mmm = require('mmmagic');
+var magic = new mmm.Magic(mmm.MAGIC_MIME_TYPE);
 
 module.exports = {
 
@@ -25,23 +27,27 @@ module.exports = {
 
               assert.equal(null, err);
 
-              var f = {};
+              magic.detect(fileData, function(err, mimeType) {
 
-              f["user_id"] = user["user_id"];
-              f["file"] = {
-                "_id":   doc.fileId,
-                id:      doc.fileId,
-                name:    doc.filename,
-                type:    doc.options.type,
-                size:    fileData.length,
-                created: doc.uploadDate
-              };
+                var f = {
+                  "user_id": user["user_id"],
+                  "file": {
+                    "_id":   doc.fileId,
+                    id:      doc.fileId,
+                    name:    doc.filename,
+                    type:    mimeType || doc.options.type,
+                    size:    fileData.length,
+                    created: doc.uploadDate
+                  }
+                };
 
-              collection.insert(f, function() {
+                collection.insert(f, function() {
 
-                assert.equal(null, err);
+                  assert.equal(null, err);
 
-                callback(f["file"], user);
+                  callback(f["file"], user);
+
+                });
 
               });
 
