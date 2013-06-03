@@ -37,8 +37,20 @@ block js-templates
 
   script#t-file(type='text/template')
     div.el(id!="<%= id %>")
-      div.name <%= name %>
+      <% if (type === 'image/jpeg' || type === 'image/png' || type === 'image/gif') { %>
+      img(src!="/api/v1/files/download/<%= id %>")
+      <% } else if (type === 'video/mp4' || type === 'video/ogg' || type === 'video/3gpp') { %>
+      video(width="100%", height="100%", controls)
+        source(src!="/api/v1/files/download/<%= id %>", type!="<%= type %>")
+        Your browser does not support the <code>video</code> element.
+      <% } else if (type === 'audio/mpeg' || type === 'audio/ogg') {  %>
+      audio(width="100%", height="100%", controls)
+        source(src!="/api/v1/files/download/<%= id %>", type!="<%= type %>")
+        Your browser does not support the <code>audio</code> element.
+      <% } else { %>
       div.type <%= type %>
+      <% } %>
+      div.name <%= name %>
       div.size <%= (size / (1024 * 1024)).toFixed(2) %> Mb
       <% if (typeof _id !== 'undefined') { %>
       div.progress

@@ -1,3 +1,8 @@
+[controls] {
+  width:100%;
+  margin-top:1.25em;
+  margin-bottom:1.25em;
+}
 #e-filelist .el {
   display: inline-block;
   width: 31%;
